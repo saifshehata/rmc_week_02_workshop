@@ -14,16 +14,30 @@ data_cmnn <- read_csv(here("data", "burden-of-disease-cmnn.csv"))
 # Here render a table for the DALY burden over time for the three countries 
 # You should pivot the data to show each country in a separate column.
 # Use kable() from the knitr package to render the table.
+cmnn_filtered <- data_cmnn %>% 
+  filter(Entity %in% c("Egypt", "Uganda", "Nigeria")) %>% 
+  select(-Code) %>%
+  pivot_wider(names_from = Entity, values_from = `DALYs (Disability-Adjusted Life Years) - Communicable, maternal, neonatal, and nutritional diseases - Sex: Both - Age: Age-standardized (Rate)`) %>% 
+  kable()
+
+cmnn_filtered
 ```
 
 ## Plot Showing Trends in CMNN Burden Over Time
 
 ```{r}
 # Here, plot a line graph showing the trend of DALY burden for the chosen countries over time. You can use ggplot2 to create this plot. Each country's line should be a different color.
+data_cmnn %>% 
+  rename(Country = Entity, `DALYs lost` = `DALYs (Disability-Adjusted Life Years) - Communicable, maternal, neonatal, and nutritional diseases - Sex: Both - Age: Age-standardized (Rate)`) %>% 
+  filter(Country %in% c("Egypt", "Uganda", "Nigeria")) %>% 
+  ggplot(aes(Year, `DALYs lost`, color = Country)) +
+  geom_line()
 ```
 
 ## Summary of CMNN Burden Findings
 
-Provide a brief analysis based on the data presented in the table and chart. Highlight any significant findings or patterns. About 3 sentences.
+Nigeria and Uganda have a high CMNN disease burden that both decreases over time.
+Egypt has a 3-4 fold lower CMNN disease burden that also decreases over time.
+The CMNN disease burden of Nigeria and Uganda decreases at a higher rate than that of Egypt.
 
 
